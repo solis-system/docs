@@ -65,6 +65,8 @@ La base MySQL de Lolapp gère :
 - **Stockage des fichiers** uploadés via l'application
 - **Comptes administrateurs** de la plateforme
 
+![Architecture Mysql Lolapp](https://imgur.com/HI71rQe.png)
+
 ### 3.2 Base de données Lola (HFSQL)
 
 La base HFSQL de chaque client contient :
@@ -73,7 +75,9 @@ La base HFSQL de chaque client contient :
 - **Configuration** et paramètres spécifiques au client
 - **Historique** des opérations commerciales
 
-![Séparation des bases de données](https://i.imgur.com/architecture_bdd.png)
+![Architecture HFSQL (lola)](https://imgur.com/Eu3bVcr.png)
+
+![Séparation des bases de données](https://imgur.com/v7dRqtB.png)
 
 ## 4. Détail des webservices A et B
 
