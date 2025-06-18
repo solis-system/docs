@@ -315,7 +315,87 @@ Une fois connecté, le personnel accède aux fonctionnalités métier :
 - **🏆 Classement** : Tableau de bord des performances et statistiques
 - **🔍 Suivi des interventions** : Gestion et suivi des interventions terrain
 
-## 10. La situation actuelle - Problématiques et interrogations
+## 10. Documentation automatique des API
+
+### 10.1 Génération de la documentation
+
+La documentation des endpoint API de Lolapp est générée automatiquement grâce à l'intégration d'**OpenAPI** et **Redocly**.
+
+![Processus de génération de documentation](https://imgur.com/yg2vrxE.png)
+
+#### Processus de documentation
+
+1. **Définition OpenAPI** : Les endpoints de l'API Laravel sont documentés en utilisant la spécification OpenAPI 3.0
+2. **Export** : Le schéma OpenAPI est généré et exporté depuis l'application Windev
+3. **Déploiement Redocly** : Le fichier OpenAPI est envoyé vers Redocly qui génère une documentation interactive
+4. **Publication** : La documentation est rendue accessible via une URL publique
+
+#### Avantages de cette approche
+
+- **📚 Documentation toujours à jour** : Synchronisation automatique avec les modifications du code
+- **🎯 Interface interactive** : Possibilité de tester les endpoints directement depuis la documentation
+- **🔍 Recherche intégrée** : Navigation facilitée dans l'API
+- **📱 Responsive** : Documentation accessible sur tous les appareils
+- **🌐 Partage facile** : URL unique pour accéder à la documentation complète
+
+### 10.2 Accès à la documentation
+
+La documentation complète de l'API est disponible à l'adresse : **[URL à fournir]**
+
+## 11. Génération de PDF d'Intervention
+
+### Endpoint
+
+**POST** `/intervention/{id_intervention}/pdf`
+
+### Description
+
+Cet endpoint permet de générer un procès-verbal (PV) d'intervention au format PDF. Le processus implique une chaîne complète de traitement depuis l'interface Vue.js jusqu'au stockage sécurisé.
+
+![Processus de génération de PDF d'intervention](https://imgur.com/qoY22lB.png)
+
+### Processus technique détaillé
+
+#### 1. Requête depuis Vue.js
+L'utilisateur remplit le formulaire d'intervention dans l'interface Vue.js et soumet les données via une requête POST à l'endpoint `/intervention/{id_intervention}/pdf`.
+
+#### 2. Traitement Laravel
+Laravel reçoit la requête et :
+- Valide les données reçues
+- Récupère les informations de l'intervention depuis la base HFSQL
+- Prépare les données pour la génération du PDF
+
+#### 3. Génération PDF avec Express
+Laravel fait appel à Express pour générer le PDF :
+- Express utilise les données formatées par Laravel
+- Le PDF est créé avec le template `intervention_pv.blade.php`
+- Le document inclut les signatures, observations et données d'intervention
+
+#### 4. Chiffrement et stockage dans Minio
+Une fois le PDF généré :
+- Il est uploadé dans Minio 
+- Le nom du fichier est transformé en nom chiffré
+
+#### 5. Enregistrement dans MySQL (table drive_files)
+Les métadonnées du fichier sont sauvegardées dans la table `drive_files` :
+- **`display_name`** : Nom original du fichier (ex: "PV_Intervention_123.pdf")
+- **`file_name`** : Nom chiffré du fichier stocké dans Minio
+- **`origin`** : "intervention_sign_pv"
+- **`customer_id`** : ID de l'entreprise
+- **`intervention_id`** : ID de l'intervention concernée
+
+#### 6. Finalisation de l'intervention
+Laravel met à jour l'intervention dans la base HFSQL :
+- `PROCESVERBAL = 1`
+- `FINALISEE = 1`
+
+### Paramètres d'URL
+
+| Paramètre | Type | Description |
+|-----------|------|-------------|
+| `id_intervention` | integer | ID unique de l'intervention |
+
+## 12. La situation actuelle - Problématiques et interrogations
 
 Un nouveau développeur Full Stack a repris le projet de l'ancien développeur.
 
