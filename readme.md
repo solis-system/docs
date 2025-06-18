@@ -395,7 +395,206 @@ Laravel met à jour l'intervention dans la base HFSQL :
 |-----------|------|-------------|
 | `id_intervention` | integer | ID unique de l'intervention |
 
-## 12. La situation actuelle - Problématiques et interrogations
+## 12. Espace Client
+
+L'espace client est une interface dédiée permettant aux clients d'accéder à leurs informations personnelles, projets, commandes et services. Il est accessible via une authentification sécurisée par SMS.
+
+
+#### 1. Authentification
+- **Contrôleur** : `SpaceController`
+- **Méthode** : `authSpace`
+
+Le processus d'authentification fonctionne ainsi :
+- Le client s'authentifie avec son numéro de téléphone
+- Validation des informations du client (code OTP envoyé par SMS)
+- Génération d'un token d'authentification Laravel Sanctum si les informations sont correctes
+- Le token sécurise toutes les requêtes ultérieures à l'API de l'espace client
+
+#### Séquence des appels API
+
+![Architecture logique et séquence des appels - Espace Client](https://imgur.com/bK3nijU.png)
+
+Voici l'ordre chronologique des appels pour l'authentification et l'accès à l'espace client :
+
+1. **POST** `/sms/otp` - Génère et envoie un code OTP au numéro du client
+2. **POST** `/sms/otp/verify` - Vérifie que le code saisi par le client est correct
+3. **POST** `/space/auth` - Génère le token d'accès à l'espace client si le code OTP est correct
+
+Une fois authentifié, le client peut accéder aux endpoints suivants :
+
+4. **GET** `/space/{idClient}/contact` - Récupère les informations du client, de l'agence, du commercial
+5. **GET** `/space/{idClient}/project` - Liste tous les projets du client
+6. **GET** `/space/{idClient}/project/{idProject}` - Liste les devis/commandes pour un projet donné
+7. **GET** `/space/{idClient}/project/{idProject}/order/{idOrder}` - Détail d'une commande (devis signé)
+8. **GET** `/space/{idClient}/project/{idProject}/quote/{idOrder}` - Détail d'un devis (en attente de signature)
+9. **GET** `/space/{idClient}/factures` - Liste des factures signées du client
+10. **GET** `/space/{idClient}/next-rdvs` - Prochains rendez-vous et interventions
+11. **POST** `/space/mail/send` - Envoi d'un mail de confirmation
+
+#### 2. Routage et Sécurité
+**Fichier de routes** : `routes/api_client.php`
+
+**Structure des routes** :
+- Toutes les routes sont préfixées par `/space/{idClient}`
+- Protection par un groupe de middlewares incluant `route.space`
+
+**Middleware de sécurité** : `RouteSpaceMiddleware`
+- Vérifie que le token d'authentification correspond au client (`idClient`) demandé
+- Empêche un client d'accéder aux informations d'un autre client
+- Assure l'isolation des données entre clients
+
+#### 3. Récupération des données
+**Contrôleur principal** : `SpaceController`
+
+#### 4. Formatage de la réponse
+
+
+Les données sont automatiquement formatées en JSON avant envoi au frontend Vue.js.
+
+### Endpoints API de l'espace client
+
+#### Génération du code OTP par SMS
+**POST** `/sms/otp`
+
+Génère et envoie un code OTP par SMS au numéro de téléphone du client.
+- **Fonction** : Génération d'un code à usage unique et envoi par SMS
+- **Paramètres** : Numéro de téléphone du client
+- **Retour** : Confirmation d'envoi du SMS avec identifiant de session
+
+#### Vérification du code OTP
+**POST** `/sms/otp/verify`
+
+Vérifie le code OTP saisi par l'utilisateur et authentifie le client.
+- **Fonction** : Validation du code OTP et génération du token d'authentification
+- **Paramètres** : Code OTP saisi par l'utilisateur et identifiant de session
+- **Retour** : Token d'authentification si le code est valide
+
+#### Authentification espace client (OTP)
+**POST** `/space/auth`
+
+Authentifie un client via un code OTP envoyé par SMS.
+- **Fonction** : Validation du code OTP et génération du token Sanctum
+- **Retour** : Token d'authentification pour les requêtes suivantes
+
+#### Détails du client
+**GET** `/space/{idClient}/contact`
+
+Récupère les informations complètes du client.
+- **Fonction** : Informations du client, de l'agence, du commercial associé
+- **Sécurité** : Vérification que le token correspond à l'idClient
+- **Resource** : `ClientResource`
+
+#### Liste des projets
+**GET** `/space/{idClient}/project`
+
+Retourne tous les projets du client authentifié.
+- **Fonction** : Liste complète des projets (en cours et terminés)
+- **Filtrage** : Seuls les projets du client sont retournés
+- **Resource** : `ProjetResource`
+
+#### Liste des devis/commandes d'un projet
+**GET** `/space/{idClient}/project/{idProject}`
+
+Liste les devis et commandes pour un projet spécifique.
+- **Fonction** : Tous les devis/commandes rattachés au projet
+- **Contrôle** : Vérification que le projet appartient au client
+- **Resource** : `QuoteResource`
+
+#### Détail d'un devis/commande
+**GET** `/space/{idClient}/project/{idProject}/order/{idOrder}`
+
+Affiche le détail d'une commande (devis signé).
+- **Fonction** : Informations détaillées de la commande
+- **Statut** : Pour les devis signés uniquement
+- **Resource** : `QuoteResource`
+
+**GET** `/space/{idClient}/project/{idProject}/quote/{idOrder}`
+
+Affiche le détail d'un devis (en attente de signature).
+- **Fonction** : Équivalent à l'endpoint précédent
+- **Statut** : Pour les devis non signés
+- **Resource** : `QuoteResource`
+
+#### Factures
+**GET** `/space/{idClient}/factures`
+
+Liste des factures signées du client.
+- **Fonction** : Toutes les factures validées et signées
+- **Filtrage** : Seules les factures du client connecté
+- **Tri** : Par date décroissante
+
+#### Prochains RDVs et interventions
+**GET** `/space/{idClient}/next-rdvs`
+
+Retourne les prochains rendez-vous et interventions programmés.
+- **Fonction** : Événements à venir (RDV, interventions, livraisons)
+- **Période** : Événements futurs uniquement
+- **Tri** : Par date croissante
+
+### Point d'entrée et authentification
+
+#### 1. Page de connexion
+**Composant** : `spaceLoginPage.vue`
+
+La connexion se fait via un processus d'authentification sécurisé :
+- Le client saisit son numéro de téléphone
+- Un code OTP (One-Time Password) est envoyé par SMS
+- Le client valide le code pour accéder à son espace
+
+#### 2. Vérification de la clé API
+**Composant** : `SpaceLayout.vue`
+
+Le layout principal vérifie :
+- La validité de la clé API de l'entreprise
+- Les autorisations d'accès du client
+- La configuration spécifique de l'espace client
+
+### Pages principales de l'espace client
+
+#### 1. Page d'accueil
+**Composant** : `spaceHomePage.vue`
+
+**Fonctionnalités** :
+- **Informations commerciales** : Affichage des données du commercial et de l'agence via `AppSpaceUserInformation`
+- **Liste des projets** : Consultation des projets du client avec navigation vers les détails
+- **Calendrier intégré** : Visualisation des rendez-vous et interventions programmées
+- **Cartes d'accès** : Navigation rapide vers les différents espaces spécialisés
+
+#### 2. Page projet
+**Composant** : `spaceProjectPage.vue`
+
+**Fonctionnalités** :
+- **Liste des commandes et devis** : Affichage pour un projet spécifique
+- **Navigation détaillée** : Accès aux détails de chaque commande ou devis
+- **Suivi d'avancement** : État des commandes et devis en cours
+
+#### 3. Page commande/devis
+**Composant** : `spaceOrderAndQuotePage.vue`
+
+**Fonctionnalités conditionnelles** :
+- **`AppSpaceOrderPage`** : Affichage si le devis est signé (commande confirmée)
+- **`AppSpaceQuotePage`** : Affichage pour les devis en attente de signature
+- **Actions disponibles** : Signature électronique, validation, commentaires
+
+### Espaces spécialisés
+
+#### 1. Espace Comptable
+**Composant** : `spaceComptablePage.vue`
+
+**Fonctionnalités** :
+- **Gestion des factures** : Affichage via `AppSpaceFactures`
+- **Historique des paiements** : Suivi des règlements et échéances
+- **Documents comptables** : Téléchargement des factures et attestations
+
+#### 2. Espace Après-vente
+**Composant** : `spaceApresVentePage.vue`
+
+**Fonctionnalités** :
+- **Demandes d'intervention** : Création et suivi des demandes SAV
+- **Historique des interventions** : Consultation des interventions passées
+- **Garanties** : Suivi des garanties et contrats de maintenance
+
+## 13. La situation actuelle - Problématiques et interrogations
 
 Un nouveau développeur Full Stack a repris le projet de l'ancien développeur.
 
