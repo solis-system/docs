@@ -270,7 +270,52 @@ Les images personnalisables utilisées dans l’application sont stockées dans 
 | `App\Models\Customer`       | Représentait les entreprises clientes dans Lolapp | ❌ Obsolète |
 | `App\Models\User`           | Compte admin Laravel pour Lolapp                  | ❌ Obsolète |
 
-## 9. La situation actuelle - Problématiques et interrogations
+## 9. Connexion Utilisateur / Clients
+
+![Séparation des chemins d'authentification](https://i.imgur.com/BO8KpTo.png)
+
+Sur la plateforme beta.lola-france.fr, deux parcours distincts sont disponibles pour les utilisateurs : d'une part, le parcours client qui est destiné aux personnes souhaitant accéder aux services en tant que clients, et d'autre part, le parcours utilisateur qui s'adresse aux personnes ayant un rôle différent dans l'utilisation de la plateforme.
+
+### 9.1 Connexion et fonctionnalités Client
+
+Les **clients** accèdent à Lolapp via un processus d'authentification par SMS.
+
+![Schéma processus client](https://i.imgur.com/ZkkvHnl.png)
+
+#### Processus de connexion Client
+1. **Saisie du numéro de téléphone** : Le client renseigne son numéro de téléphone portable
+2. **Envoi du code** : Un code de vérification à usage unique est envoyé par SMS
+3. **Validation du code** : Le client saisit le code reçu pour confirmer son identité
+4. **Génération du token** : Un token d'accès est créé dans la table `personal_access_tokens` avec `tokenable_type = App\Models\Lola\Client` (pas sur)
+
+#### Fonctionnalités accessibles aux Clients
+Une fois authentifié, le client accède aux fonctionnalités suivantes :
+
+- **📋 Liste des projets** : Consultation de ses projets en cours et terminés
+- **💰 Espace comptable** : Suivi des devis, factures et paiements
+- **🔧 Service après-vente** : Demandes d'intervention et suivi SAV
+- **📅 Calendrier** : Visualisation des rendez-vous et interventions programmées
+- **👥 Mon parrain** : Système de parrainage et recommandations
+
+### 9.2 Connexion utilisateur
+
+Les **utilisateurs** utilisent une authentification classique par email/mot de passe.
+
+![Schéma processus utilisateur](https://i.imgur.com/v9uiTIu.png)
+
+#### Processus de connexion Utilisateur
+1. **Saisie des identifiants** : Email et mot de passe du collaborateur
+2. **Vérification HFSQL** : Contrôle des identifiants dans la table `PERSONNEL` de la base Lola
+3. **Génération du token** : Un token d'accès est créé avec `tokenable_type = App\Models\Lola\Personnel`
+
+#### Fonctionnalités accessibles au Personnel
+Une fois connecté, le personnel accède aux fonctionnalités métier :
+
+- **📋 Mes affectations** : Liste des projets et interventions assignés
+- **🏆 Classement** : Tableau de bord des performances et statistiques
+- **🔍 Suivi des interventions** : Gestion et suivi des interventions terrain
+
+## 10. La situation actuelle - Problématiques et interrogations
 
 Un nouveau développeur Full Stack a repris le projet de l'ancien développeur.
 
