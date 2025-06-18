@@ -1,0 +1,292 @@
+## 1. Vue d'ensemble
+
+**Lolapp** est une application **PWA** (Progressive Web App) destinée aux clients professionnels utilisant notre logiciel **Lola**.  
+Elle permet d’accéder à distance à certaines fonctionnalités et données de Lola via une interface moderne, responsive et accessible depuis un navigateur le plus souvent d'un smartphone.
+
+### Architecture technique
+
+Sur l'ancienne version hébergée sur solisws.fr
+
+- **Frontend** : Vue.js 2
+- **Backend pour connexion et token** : Laravel (PHP)
+- **Backend** : Webservice Windev
+- **Base de données Lolapp** : MySQL
+- **Stockage fichiers & images** : Minio (object storage compatible S3)
+
+Sur la nouvelle version en cours de développement hébergée sur beta.lola-france.fr
+
+- **Frontend** : Vue.js 3
+- **Backend** : Laravel (PHP)
+- **Connecteur base Lola** : Webservice Windev (Un seul endpoint où laravel transmet les requetes)
+- **Base de données Lolapp** : MySQL
+- **Stockage fichiers & images** : Minio (object storage compatible S3)
+
+![Architecture générale](https://i.imgur.com/Meuu59F.png)
+
+## 2. Connexion à la base Lola (HFSQL)
+
+La base **HFSQL** du logiciel Lola est généralement hébergée **en local** chez le client (poste serveur).
+Pour interagir avec cette base à distance, un **webservice Windev** (versions `A` ou `B`) sert de **connecteur entre Lolapp et Lola**.
+
+![Connecteur Lola vers Lolapp](https://i.imgur.com/pJZwne7.png)
+
+Depuis solisws.fr
+Lorsque l'utilisateur saisit son mail et mot de passe, une requete est d'abord faite à la base MariaDB à la table users pour voir si c'est correct puis on récupère le customer_id.
+Grâce à cela, on obtient dans la table customer :
+
+- Les identifiants de connexion à la BASE HFSQL chez le client
+- La version du webservice à utiliser (solisws.fr n'est compatible qu'avec le webservice A)
+  Nous sommes contraints de créer un utilisateur avec ses rôles et autres droits et de maintenir en doublons la liste alors que ces utilisateurs sont dans la base HFSQL du client.
+  Les requetes sont faites à travers des endpoint créés avec le Webservice A
+
+Depuis beta.lola-france.fr
+L'utilisateur se connecte de la même façon mais depuis un sous domaine dédiée à l'entreprise.
+Pour ce faire, nous avons ajouté le nom du sous domaine dans le champ key de la table customer. (exemple sam.beta.lola-france.fr)
+Cela permet de connaitre, directement au chargement de la page, avant même que l'utilisateur se connecte :
+
+- Les identifiants de connexion à la BASE HFSQL chez le client
+- La version du webservice à utiliser (beta.lola-france.fr est compatible avec le webservice A et le webservice B)
+  les paramètres de connexions à la base HFSQL du client puisque dans la table customers,
+  Ensuite on contrôle directement l'identification (email et mot de passe) via une requete sur la base HFSQL du client.
+  Les requetes sont faites avec Laravel et une grande partie des endpoints a été recréée.
+  Ces requetes sont ensuite transmises à l'unique endpoint
+
+Dans les deux cas, les tokens sont gérés et enregistrés dans MariaDB dans la table personal_access_tokens
+
+![Connexion HFSQL](https://i.imgur.com/8awMfsf.png)
+
+## 3. Architecture des bases de données
+
+### 3.1 Base de données Lolapp (MySQL/MariaDB)
+
+La base MySQL de Lolapp gère :
+- **Authentification et tokens** des utilisateurs
+- **Configuration des entreprises clientes** (connexions, personnalisation)
+- **Stockage des fichiers** uploadés via l'application
+- **Comptes administrateurs** de la plateforme
+
+### 3.2 Base de données Lola (HFSQL)
+
+La base HFSQL de chaque client contient :
+- **Données métier** (clients, projets, devis, interventions)
+- **Personnel** de l'entreprise
+- **Configuration** et paramètres spécifiques au client
+- **Historique** des opérations commerciales
+
+![Séparation des bases de données](https://i.imgur.com/architecture_bdd.png)
+
+## 4. Détail des webservices A et B
+
+Le webservice A correspond au serveur d'application WEBDEV 28 - Version Windows (c'est la version historique du projet Lolapp)
+Ce webservice A a été installé avec l'analyse de notre version Lola actuelle (Version 2025.0)
+De nombreux endpoints ont été créés dans cette version du serveur d'application.
+
+Le webservice B correspond au serveur d'application WEBDEV 2025 - Version Linux
+Ce webservice B a été installé avec l'analyse de notre future version Lola (Version 2026.0).
+Dans ce webservice B, il n'y a qu'un seul Endpoint, celui qui récupère les requetes faites par Laravel et qui lui sont transmises à la fin.
+
+## 5. Tables de la base Lolapp (MySQL)
+
+### 5.1 Table `customers` (Modèle `Company`)
+
+Chaque entreprise cliente est enregistrée dans cette table, contenant toutes les informations nécessaires pour établir la connexion entre Lolapp et sa base Lola.
+
+#### Champs importants
+
+| Champ             | Description                                                               |
+| ----------------- | ------------------------------------------------------------------------- |
+| `key`             | Sous-domaine de la PWA (ex. `sm30` → `https://sm30.beta.lola-france.fr/`) |
+| `database_server` | IP publique du serveur HFSQL du client                                    |
+| `database_name`   | Nom de la base HFSQL (défaut = `Données` si vide)                         |
+| `webservice`      | `A` = version Windev 28 / `B` = version 2025                              |
+| `apikey`          | Clé de licence identique à celle de la base Lola                          |
+| `color`           | Code couleur HEX des boutons de l’interface (ex. `#FF5733`)               |
+| `background`      | Nom de l'image de fond utilisée dans Lolapp                               |
+| `logo`            | Nom du logo affiché dans Lolapp                                           |
+| `entete`          | Nom de l'image utilisée en entête des documents (ex. PV de réception)     |
+| `fb_url`          | Ancienne URL d’avis Facebook (non utilisée actuellement)                  |
+| `ggl_review_url`  | Ancienne URL d’avis Google (non utilisée actuellement)                    |
+
+### 5.2 Table `admin` (Modèle `User`)
+
+Cette table gère les utilisateurs administratifs de la plateforme Lolapp elle-même (accès back-office, etc.).
+
+#### Champs clés
+
+| Champ              | Description                                                              |
+| ------------------ | ------------------------------------------------------------------------ |
+| `id`               | Clé primaire, identifiant unique de l'administrateur.                    |
+| `name`             | Nom de l'administrateur.                                                 |
+| `email`            | Adresse email de connexion de l'administrateur.                          |
+| `password`         | Mot de passe hashé de l'administrateur.                                  |
+| `idpersonnel_lola` | Identifiant du personnel Lola associé (si l'admin est aussi un user Lola). |
+| `customer_id`      | Identifiant de l'entreprise (table `customers`) si admin spécifique.     |
+| `created_at`       | Date de création du compte administrateur.                               |
+| `updated_at`       | Date de dernière mise à jour du compte administrateur.                   |
+
+### 5.3 Table `drive_files`
+
+Cette table liste tous les fichiers uploadés sur Minio depuis Lolapp, principalement les documents générés et signés.
+
+#### Champs clés
+
+| Champ             | Description                                      |
+| ----------------- | ------------------------------------------------ |
+| `file_name`       | Nom du fichier dans Minio                        |
+| `display_name`    | Nom affiché à l’utilisateur                      |
+| `customer_id`     | ID de l’entreprise concernée                     |
+| `origin`          | Origine de l’upload (ex. `intervention_sign_pv`) |
+| `client_id`       | ID du client associé                             |
+| `project_id`      | ID du projet associé                             |
+| `quote_id`        | ID du devis associé                              |
+| `invoice_id`      | ID de la sous-facture associée                   |
+| `intervention_id` | ID de l’intervention associée                    |
+| `public`          | Non utilisé pour le moment                       |
+| `portfolio`       | Non utilisé pour le moment                       |
+
+👉 **API associée** : [drive.uploadFiles – documentation API](https://api.lola-france.fr/docs/api#/operations/drive.uploadFiles)
+
+### 5.4 Table `personal_access_tokens`
+
+Cette table gère l'**authentification** via des tokens (type Laravel Sanctum). Un token peut être associé à différents types d'utilisateurs.
+
+#### Champs importants
+
+- `tokenable_type` : définit le type d'utilisateur associé au token
+- `tokenable_id` : identifiant de l'utilisateur
+
+#### Valeurs possibles pour `tokenable_type`
+
+| Valeur                      | Utilisation                                                    |
+| --------------------------- | -------------------------------------------------------------- |
+| `App\Models\Lola\Client`    | Connexion d'un client final via numéro de téléphone + OTP SMS  |
+| `App\Models\Lola\Personnel` | Connexion d'un collaborateur Lola via email + mot de passe     |
+| `App\Models\Laravel\User`   | Connexion d'un administrateur (actuellement limité à `id = 1`) |
+
+## 6. Tables de la base Lola (HFSQL)
+
+### 6.1 Table `PERSONNEL`
+
+Cette table contient les informations sur les collaborateurs de l'entreprise utilisant Lola.
+
+#### Champs clés
+
+| Champ                | Description                                                     |
+| -------------------- | --------------------------------------------------------------- |
+| `IDPERSONNEL`        | Clé primaire, identifiant unique du personnel.                  |
+| `MAIL`               | Adresse email du personnel (utilisée pour la connexion Lolapp). |
+| `MOT_DE_PASSE`       | Mot de passe du personnel (géré par Lola).                      |
+| `NOM`                | Nom de famille du personnel.                                    |
+| `PRENOM`             | Prénom du personnel.                                            |
+| `TELEPHONE_PORTABLE` | Numéro de téléphone portable du personnel.                      |
+| `IDAGENCE`           | Identifiant de l'agence de rattachement.                        |
+| `DATE_SORTIE`        | Date de départ du personnel (0 si toujours actif).              |
+| `INACTIF`            | Indicateur d'inactivité (0 si actif, 1 si inactif).             |
+
+### 6.2 Table `CLIENT`
+
+Cette table stocke les informations relatives aux clients finaux de l'entreprise.
+
+#### Champs clés
+
+| Champ             | Description                                           |
+| ----------------- | ----------------------------------------------------- |
+| `IDCLIENT`        | Clé primaire, identifiant unique du client.           |
+| `NOM`             | Nom du client.                                        |
+| `PRENOM`          | Prénom du client.                                     |
+| `MAIL`            | Adresse email du client.                              |
+| `PORTABLE`        | Numéro de téléphone portable principal du client.     |
+| `IDADRESSE`       | Identifiant de l'adresse principale du client.        |
+| `IDCIVILITE`      | Identifiant de la civilité du client (M., Mme, etc.). |
+| `IDAGENCE`        | Identifiant de l'agence associée au client.           |
+| `IDPERSONNEL`     | Identifiant du personnel référent pour ce client.     |
+| `IDETAT_CLIENT`   | Identifiant de l'état actuel du client.               |
+| `DATE_CREATION`   | Date de création de la fiche client.                  |
+| `DATE_MODIF`      | Date de dernière modification de la fiche client.     |
+
+### 6.3 Table `PROJET`
+
+Cette table centralise les informations concernant les projets ou chantiers.
+
+#### Champs clés
+
+| Champ                 | Description                                                        |
+| --------------------- | ------------------------------------------------------------------ |
+| `IDPROJET`            | Clé primaire, identifiant unique du projet.                        |
+| `NOMADE_NUMPROJET`    | Numéro de projet unique pour l'application nomade (généré).        |
+| `IDCLIENT`            | Identifiant du client associé au projet.                           |
+| `IDADRESSECHANTIER`   | Identifiant de l'adresse du chantier.                              |
+| `IDADRESSEFACTURATION`| Identifiant de l'adresse de facturation.                           |
+| `IDORIGINE`           | Identifiant de l'origine du projet (ex: recommandation, salon).    |
+| `DESCRIPTION`         | Description détaillée du projet.                                   |
+| `OBSERVATION`         | Observations générales sur le projet.                              |
+| `IDRESPONSABLEPROJET` | Identifiant du personnel responsable du projet.                    |
+| `IDAGENCE`            | Identifiant de l'agence gérant le projet.                          |
+| `IDETAT_PROJET`       | Identifiant de l'état actuel du projet.                            |
+| `DATE_CREATION`       | Date de création du projet.                                        |
+| `DATE_MODIF`          | Date de dernière modification du projet.                           |
+
+### 6.4 Table `DEVIS`
+
+Cette table contient les informations sur les devis établis pour les projets.
+
+#### Champs clés
+
+| Champ              | Description                                                      |
+| ------------------ | ---------------------------------------------------------------- |
+| `IDDEVIS`          | Clé primaire, identifiant unique du devis.                       |
+| `NOMADE_NUMDEVIS`  | Numéro de devis unique pour l'application nomade (généré).       |
+| `IDPROJET`         | Identifiant du projet auquel le devis est rattaché.              |
+| `IDCLIENT`         | Identifiant du client concerné par le devis.                     |
+| `NUMERO_DEVIS`     | Numéro officiel du devis.                                        |
+| `LIBELLE`          | Libellé ou titre du devis.                                       |
+| `DATE_SIGNATURE`   | Date à laquelle le devis a été signé par le client.              |
+| `PRIX_TTC`         | Montant total Toutes Taxes Comprises du devis.                   |
+| `DEVIS_SIGNE`      | Indicateur booléen si le devis est signé (1) ou non (0).         |
+| `DATE_CREATION`    | Date de création du devis.                                       |
+| `TEXTE_DEVIS`      | Contenu textuel détaillé du devis (souvent au format RTF).       |
+| `COMMENTAIRE`      | Commentaires additionnels sur le devis (souvent au format RTF).  |
+
+## 7. Gestion des images (background, logo, entête)
+
+Les images personnalisables utilisées dans l’application sont stockées dans **Minio**, un object storage (type S3) accessible à l’adresse :
+
+🔗 **https://minio.solisws.fr**
+
+### Fonctionnement
+
+- Chaque client dispose de son propre **bucket**, nommé selon sa `apikey` dans la table customers (sans espaces ni underscores).
+- Les images renseignées dans les champs `background`, `logo` et `entete` de la table `customers` doivent être déposées dans ce bucket.
+  (Ces images s’affichent dans Lolapp (écran d’accueil, documents PV de réception, etc.).)
+
+## 8. Modèles utilisés
+
+> 🛠️ **Note** : certains modèles sont encore présents dans le code mais **ne sont plus utilisés** activement.
+
+| Modèle                      | Description                                       | Statut      |
+| --------------------------- | ------------------------------------------------- | ----------- |
+| `App\Models\Lola\Client`    | Client final dans la base Lola                    | ✅ Utilisé  |
+| `App\Models\Lola\Personnel` | Collaborateur d’entreprise (base Lola)            | ✅ Utilisé  |
+| `App\Models\Customer`       | Représentait les entreprises clientes dans Lolapp | ❌ Obsolète |
+| `App\Models\User`           | Compte admin Laravel pour Lolapp                  | ❌ Obsolète |
+
+## 9. La situation actuelle - Problématiques et interrogations
+
+Un nouveau développeur Full Stack a repris le projet de l'ancien développeur.
+
+Il avait du mal a débugger / maintenir et créer de nouvelles fonctionnalités, les webservices n'étaient pas trés bien écrits et les retours json étaient incompréhensibles.
+
+Aussi il a fait évoluer le projet Lolapp
+Migration de HTTP/1 vers HTTP/2
+Migration de PHP6 vers PHP8
+Puis
+Migration vuejs2 en vuejs3
+Il a réécrit les endpoints directement dans Laravel.
+Malheureusement la base de données des clients étants en HFSQL, il a été contraint de garder un webservice webdev et utilise un seul endpoint auquel il transmet l'ensemble des requetes faites au préalables via Laravel.
+Tout cela semblait trop beau mais finalement, on s'est vite rendu compte qu'on perdait en performance.
+
+Est ce que la solution ne serait pas plutot de déléguer à notre développeur Windev l'écriture et la maintenance des webservices en WEBDEV et le développeur Web n'aura qu'à les consommer ?
+
+Si on réécrit les endpoints Laravel en webdev et qu'il sont strictement identiques.
+Quels sont les changements que doit faire le développeur de Lolapp pour faire appel à ces nouveaux endpoint ?
+Y a t'il beaucoup de travail ?
