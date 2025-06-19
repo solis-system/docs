@@ -1,0 +1,20 @@
+Trop dense : 13 sections dans un seul fichier, difficile à naviguer
+
+Procédures de déploiement : comment déployer les modifications ?
+
+# Vue d'ensemble - Lolapp
+
+## Architecture générale
+[Contenu section 1 actuelle]
+
+## Environnements
+- **Production** : https://[URL_PRODUCTION]
+- **Beta** : https://beta.lola-france.fr
+- **Ancien** : https://solisws.fr
+
+## Contacts et responsabilités
+| Rôle | Personne | Contact |
+|------|----------|---------|
+| Développeur Full Stack | [Nom] | [Email] |
+| Développeur Windev | [Nom] | [Email] |
+| Admin Système | [Nom] | [Email] |
