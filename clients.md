@@ -119,7 +119,5 @@ POST /webhook/contact/create
 
 **Description** : Endpoint d'import automatique via webservice Lola
 
-**Usage** : Intégration avec systèmes externes et IA
-
 ---
 [← Espace client](./client-space.md) | [Retour à l'index](./readme.md) | [Problématiques →](./issues.md)

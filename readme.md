@@ -77,26 +77,16 @@ Deux types d'utilisateurs avec des parcours distincts :
 - Vue.js 3
 - Accès aux bases HFSQL clients
 
-### Installation
-```bash
-# Backend Laravel
-composer install
-php artisan migrate
-
-# Frontend Vue.js
-npm install
-npm run dev
-```
-
-## 📝 Historique
-
-| Version | Date | Modifications |
-|---------|------|---------------|
-| 1.0 | 2025-06-18 | Documentation initiale restructurée |
-
 ---
 
 **🔗 Liens utiles**
 - [API Documentation](https://api.lola-france.fr/docs/api)
 - [Minio Storage](https://minio.solisws.fr)
 - Support technique : [contact@lola-france.fr](mailto:contact@lola-france.fr)
+
+## 📝 Historique
+
+| Version | Date | Modifications |
+|---------|------|---------------|
+| 1.0 | 2025-06-18 | Documentation initiale restructurée |
+| 1.1 | 2025-06-19 | Ducmention sur client / devis / datacache / ranking |

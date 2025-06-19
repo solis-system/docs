@@ -155,19 +155,6 @@ POST /intervention/{id}/finalize
 PUT /intervention/{id}/update
 ```
 
-### Projets et devis
-```http
-GET /projects/{idClient}
-GET /quotes/{idProject}
-POST /quote/{id}/sign
-```
-
-### Calendrier
-```http
-GET /calendar/{idPersonnel}
-GET /appointments/next
-```
-
 ## Codes de réponse
 
 ### Succès
