@@ -181,4 +181,4 @@ L'espace client est une interface dédiée permettant aux clients d'accéder à 
 - **Backup** : Sauvegarde automatique
 
 ---
-[← API & Endpoints](./api.md) | [Retour à l'index](./readme.md) | [Problématiques →](./issues.md)
+[← Endpoint Ranking](./ranking.md) | [Retour à l'index](./readme.md) | [Gestion des clients →](./clients.md)

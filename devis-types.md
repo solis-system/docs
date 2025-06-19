@@ -168,4 +168,4 @@ GET /devis?TYPE=all
 ```
 
 ---
-[← Gestion des rendez-vous](./rdvs.md) | [Retour à l'index](./readme.md) | [Espace client →](./client-space.md)
+[← Gestion des rendez-vous](./rdvs.md) | [Retour à l'index](./readme.md) | [Endpoint Ranking →](./ranking.md)

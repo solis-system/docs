@@ -13,6 +13,7 @@
 | [Gestion des clients](./clients.md) | API clients : CRUD, recherche et géolocalisation |
 | [Gestion des rendez-vous](./rdvs.md) | Affichage des RDVs |
 | [Système de types devis](./devis-types.md) | Filtrage et segmentation des devis |
+| [Endpoint Ranking](./ranking.md) | Classement et analyse des performances commerciales |
 | [Espace client](./client-space.md) | Fonctionnalités de l'espace client |
 | [Problématiques actuelles](./issues.md) | Défis techniques et solutions proposées |
 
