@@ -185,29 +185,5 @@ GET /appointments/next
 - **500** : Internal Server Error - Erreur serveur
 - **503** : Service Unavailable - Service temporairement indisponible
 
-## Formats de réponse
-
-### Structure standard
-```json
-{
-  "success": true,
-  "data": { ... },
-  "message": "Operation successful",
-  "errors": null
-}
-```
-
-### Gestion des erreurs
-```json
-{
-  "success": false,
-  "data": null,
-  "message": "Validation failed",
-  "errors": {
-    "field": ["Error message"]
-  }
-}
-```
-
 ---
 [← Authentification](./authentication.md) | [Retour à l'index](./readme.md) | [Espace client →](./client-space.md)

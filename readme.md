@@ -10,7 +10,9 @@
 | [Bases de données](./databases.md) | Structure des tables MySQL et HFSQL |
 | [Authentification](./authentication.md) | Systèmes de connexion clients et personnel |
 | [API & Endpoints](./api.md) | Documentation des API et webservices |
+| [Gestion des clients](./clients.md) | API clients : CRUD, recherche et géolocalisation |
 | [Gestion des rendez-vous](./rdvs.md) | Affichage des RDVs |
+| [Système de types devis](./devis-types.md) | Filtrage et segmentation des devis |
 | [Espace client](./client-space.md) | Fonctionnalités de l'espace client |
 | [Problématiques actuelles](./issues.md) | Défis techniques et solutions proposées |
 
