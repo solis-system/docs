@@ -22,14 +22,6 @@ Le standard ISO 8601 définit le format international pour représenter les date
 - `06-20-2025T08:05:05` (ordre américain)
 - `2025/06/20 08:05:05` (mauvais séparateurs)
 
-## Bonnes pratiques
-1. **Toujours utiliser UTC** pour les APIs
-2. **Inclure le fuseau horaire** quand nécessaire
-3. **Utiliser le format complet** pour éviter l'ambiguïté
-4. **Valider le format** côté client et serveur
-
 ## Remarques importantes
 - Le `T` sépare la date de l'heure
 - Le `Z` indique UTC (Zulu time)
-- Format lisible par la plupart des langages de programmation
-- Standard international reconnu
