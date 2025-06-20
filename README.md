@@ -91,3 +91,4 @@ Deux types d'utilisateurs avec des parcours distincts :
 |---------|------|---------------|
 | 1.0 | 2025-06-18 | Documentation initiale restructurée |
 | 1.1 | 2025-06-19 | Ducmention sur client / devis / datacache / ranking |
+| 1.2 | 2025-06-20 | Ajout de la page Uptime |
