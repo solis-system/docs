@@ -1,0 +1,15 @@
+# Table of contents
+
+* [Documentation Lolapp](README.md)
+* [API & Endpoints Lolapp](api.md)
+* [Architecture technique Lolapp](architecture.md)
+* [Authentification Lolapp](authentication.md)
+* [Espace Client Lolapp](client-space.md)
+* [Gestion des Clients Lolapp](clients.md)
+* [Bases de données Lolapp](databases.md)
+* [DataCache - Système de Cache des Données de Référence](datacache.md)
+* [devis-types](devis-types.md)
+* [Problématiques actuelles et solutions](issues.md)
+* [Endpoint Ranking - Classement des Devis](ranking.md)
+* [Gestion des rendez-vous Lolapp](rdvs.md)
+* [blablafdddpf](blablafdddpf.md)
