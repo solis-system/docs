@@ -12,4 +12,5 @@
 * [Problématiques actuelles et solutions](issues.md)
 * [Endpoint Ranking - Classement des Devis](ranking.md)
 * [Gestion des rendez-vous Lolapp](rdvs.md)
+* [Monitoring Uptime - Surveillance des Services](uptime.md)
 * [blablafdddpf](blablafdddpf.md)

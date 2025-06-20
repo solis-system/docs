@@ -15,6 +15,7 @@
 | [Système de types devis](./devis-types.md) | Filtrage et segmentation des devis |
 | [Endpoint Ranking](./ranking.md) | Classement et analyse des performances commerciales |
 | [Espace client](./client-space.md) | Fonctionnalités de l'espace client |
+| [Monitoring Uptime](./uptime.md) | Surveillance des services et infrastructure |
 | [Problématiques actuelles](./issues.md) | Défis techniques et solutions proposées |
 
 ## 🚀 Démarrage rapide
