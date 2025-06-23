@@ -76,6 +76,11 @@ Lien du Webhook : https://mattermost.solisws.fr/hooks/o9np599a6jniijdnbb4jj1q8oh
 
 ![Configuration webhook Mattermost - Interface de notification d'alertes](https://imgur.com/QNQPeaa.png)
 
+ps : Le bot est un compte utilisateur qui a créer un webhook pour envoyer les alertes. 
+- le mail : botmail@solis-system.com
+- le mdp : 20252025!!
+
+
 ---
 
 [← Problématiques](issues.md) | [Retour à l'index](./) | [Déploiement →](deployment.md)
