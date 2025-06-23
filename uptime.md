@@ -48,7 +48,7 @@ Le système de monitoring Uptime permet de surveiller en temps réel la disponib
 - **Base** : MySQL (Lolapp) + HFSQL (Lola)
 - **Storage** : Minio S3
 
-### 4. Administration Lola France
+### 4. Frontend Lola France
 
 **URL** : [https://admin.beta.lola-france.fr/](https://admin.beta.lola-france.fr/)
 
@@ -56,9 +56,30 @@ Le système de monitoring Uptime permet de surveiller en temps réel la disponib
 
 **Caractéristiques** :
 - **Frontend** : Vue.js 3
-- **Backend** : Laravel + Webservice Windev B
 - **Fonction** : Administration et configuration
 - **Accès** : Réservé aux administrateurs
+
+### 5. API Backend Lola France
+
+**URL** : [https://api.lola-france.fr/](https://api.lola-france.fr/)
+
+**Description** : API REST pour la nouvelle version Lola France
+
+**Caractéristiques** :
+- **Backend** : Laravel
+- **Type** : API REST moderne
+- **Base** : MySQL (Lolapp) + HFSQL (Lola)
+
+### 6. API Backend Solisws
+
+**URL** : [https://api.solisws.fr/](https://api.solisws.fr/)
+
+**Description** : API REST pour la version legacy Solisws
+
+**Caractéristiques** :
+- **Backend** : Laravel
+- **Type** : API REST legacy
+- **Base** : MySQL (Lolapp) + HFSQL (Lola)
 
 ## Architecture de monitoring
 
