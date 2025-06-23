@@ -10,6 +10,8 @@ Le système de monitoring Uptime permet de surveiller en temps réel la disponib
 
 ## Services surveillés
 
+![Dashboard de monitoring des services - Vue d'ensemble des statuts de disponibilité](https://imgur.com/epCyW6p.png)
+
 ### 1. Webservice Lola France
 
 **URL** : [https://ws-a.lola-france.fr/](https://ws-a.lola-france.fr/)
@@ -69,6 +71,10 @@ Le système de monitoring Uptime permet de surveiller en temps réel la disponib
 ### Canaux d'alerte
 
 - **Webhook** : Intégration avec outils tiers
+
+Lien du Webhook : https://mattermost.solisws.fr/hooks/hzqxkznpkpngtqr1t8xhpyh44r
+
+![Configuration webhook Mattermost - Interface de notification d'alertes](https://imgur.com/hLrrpcr.png)
 
 ---
 
