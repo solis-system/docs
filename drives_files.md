@@ -41,6 +41,22 @@ Puis sa enreistre finalement dans le minio avec un nom spécifique (cf. ).
   - `file_ids` (array d’IDs de fichiers à supprimer)
 - **Réponse** : JSON avec la liste des fichiers supprimés.
 
+### 4. `/drive/sign_document`
+- **Méthode** : POST
+- **Contrôleur** : `DriveController@signDocument`
+- **Description** : Permet de signer un ou plusieurs documents stockés dans le drive.
+- **Paramètres attendus** :
+  - `arrayOfFile` (obligatoire, array d’identifiants de fichiers à signer)
+  - `signContent` (obligatoire, contenu de la signature, image ou chaîne encodée)
+- **Traitement** :
+  - Pour chaque fichier, récupération depuis le stockage local.
+  - Appel HTTP POST vers [https://express.solisws.fr/sign](https://express.solisws.fr/sign) avec le fichier et la signature.
+  - Le fichier signé retourné remplace l’ancien fichier dans le stockage.
+  - Vérification des droits via `checkPermission` (le `customer_id` du fichier doit correspondre à celui de l’utilisateur courant).
+- **Réponse** :
+  - Si succès : contenu du fichier signé (PDF) avec les bons headers.
+  - Sinon : message d’erreur JSON.
+
 ## Fonctionnalité : Authentification par OTP (One Time Password) via Express
 
 1. **Saisie du numéro de téléphone**  
