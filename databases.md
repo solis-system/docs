@@ -47,7 +47,7 @@ Utilisateurs administratifs de la plateforme.
 
 ### Table `drive_files`
 
-Fichiers uploadés dans Minio ([voir endpoints et process](./drives_files.md)).
+Fichiers uploadés dans Minio ([voir endpoints et process](drives_files.md)).
 
 | Champ             | Type   | Description                                 |
 | ----------------- | ------ | ------------------------------------------- |
@@ -151,4 +151,4 @@ Devis établis pour les projets.
 
 ***
 
-[← Architecture](architecture.md) | [Retour à l'index](./) | [Authentification →](authentication.md)
+[← Architecture](architecture.md) | [Retour à l'index](README.md) | [Authentification →](authentication.md)

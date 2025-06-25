@@ -94,4 +94,4 @@ Un nouveau développeur Full Stack a repris le projet Lolapp de l'ancien dévelo
 
 ***
 
-[← Gestion des clients](clients.md) | [Retour à l'index](./) | [Monitoring Uptime →](uptime.md)
+[← Gestion des clients](clients.md) | [Retour à l'index](README.md) | [Monitoring Uptime →](uptime.md)

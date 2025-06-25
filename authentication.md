@@ -180,4 +180,4 @@ tokenable_type = 'App\Models\Laravel\User'   -- Admin
 
 ***
 
-[← Bases de données](databases.md) | [Retour à l'index](./) | [API & Endpoints →](api.md)
+[← Bases de données](databases.md) | [Retour à l'index](README.md) | [API & Endpoints →](api.md)

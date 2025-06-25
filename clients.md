@@ -138,4 +138,4 @@ POST /webhook/contact/create
 
 ***
 
-[← Espace client](client-space.md) | [Retour à l'index](./) | [Problématiques →](issues.md)
+[← Espace client](client-space.md) | [Retour à l'index](README.md) | [Problématiques →](issues.md)

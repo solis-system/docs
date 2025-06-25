@@ -165,4 +165,4 @@ L'espace client est une interface dédiée permettant aux clients d'accéder à 
 
 ***
 
-[← Endpoint Ranking](ranking.md) | [Retour à l'index](./) | [Gestion des clients →](clients.md)
+[← Endpoint Ranking](ranking.md) | [Retour à l'index](README.md) | [Gestion des clients →](clients.md)

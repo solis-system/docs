@@ -69,4 +69,4 @@ Aperçu de l'interface :
 
 ---
 
-[← Retour à l'index](./README.md)
+[← Retour à l'index](README.md)

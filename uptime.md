@@ -104,4 +104,4 @@ ps : Le bot est un compte utilisateur qui a créer un webhook pour envoyer les a
 
 ---
 
-[← Problématiques](issues.md) | [Retour à l'index](./) | [Déploiement →](deployment.md)
+[← Problématiques](issues.md) | [Retour à l'index](README.md) | [Déploiement →](deployment.md)

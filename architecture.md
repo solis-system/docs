@@ -11,14 +11,14 @@ Lolapp utilise une architecture moderne basée sur une Progressive Web App (PWA)
 * **Frontend** : Vue.js 2
 * **Backend** : Laravel (PHP) + Webservice Windev A
 * **Base de données** : MySQL (Lolapp) + HFSQL (Lola)
-* **Storage** : Minio (S3 compatible) ([voir détails upload](./drives_files.md))
+* **Storage** : Minio (S3 compatible) ([voir détails upload](drives_files.md))
 
 ### Nouvelle version (beta.lola-france.fr)
 
 * **Frontend** : Vue.js 3
 * **Backend** : Laravel (PHP) + Webservice Windev B
 * **Base de données** : MySQL (Lolapp) + HFSQL (Lola)
-* **Storage** : Minio (S3 compatible) ([voir détails upload](./drives_files.md))
+* **Storage** : Minio (S3 compatible) ([voir détails upload](drives_files.md))
 
 ## Diagrammes d'architecture
 
@@ -134,4 +134,4 @@ minio.solisws.fr/
 
 ***
 
-[← Retour à l'index](./) | [Bases de données →](databases.md)
+[← Retour à l'index](README.md) | [Bases de données →](databases.md)

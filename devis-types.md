@@ -185,4 +185,4 @@ GET /devis?TYPE=all
 
 ***
 
-[← Gestion des rendez-vous](rdvs.md) | [Retour à l'index](./) | [Endpoint Ranking →](ranking.md)
+[← Gestion des rendez-vous](rdvs.md) | [Retour à l'index](README.md) | [Endpoint Ranking →](ranking.md)

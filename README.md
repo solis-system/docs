@@ -6,19 +6,19 @@
 
 | Document | Description |
 |----------|-------------|
-| [Architecture technique](./architecture.md) | Stack technique, webservices et connecteurs |
-| [Bases de données](./databases.md) | Structure des tables MySQL et HFSQL |
-| [Authentification](./authentication.md) | Systèmes de connexion clients et personnel |
-| [API & Endpoints](./api.md) | Documentation des API et webservices |
-| [Gestion des clients](./clients.md) | API clients : CRUD, recherche et géolocalisation |
-| [Gestion des rendez-vous](./rdvs.md) | Affichage des RDVs |
-| [Système de types devis](./devis-types.md) | Filtrage et segmentation des devis |
-| [Endpoint Ranking](./ranking.md) | Classement et analyse des performances commerciales |
-| [Espace client](./client-space.md) | Fonctionnalités de l'espace client |
-| [Monitoring Uptime](./uptime.md) | Surveillance des services et infrastructure |
-| [Problématiques actuelles](./issues.md) | Défis techniques et solutions proposées |
-| [Documentation Telescope (Monitoring API)](./telescope.md) | Documentation pour le monitoring des API avec Telescope |
-| [API Drive (Upload Minio)](./drives_files.md) | Documentation endpoints fichiers et upload Minio |
+| [Architecture technique](architecture.md) | Stack technique, webservices et connecteurs |
+| [Bases de données](databases.md) | Structure des tables MySQL et HFSQL |
+| [Authentification](authentication.md) | Systèmes de connexion clients et personnel |
+| [API & Endpoints](api.md) | Documentation des API et webservices |
+| [Gestion des clients](clients.md) | API clients : CRUD, recherche et géolocalisation |
+| [Gestion des rendez-vous](rdvs.md) | Affichage des RDVs |
+| [Système de types devis](devis-types.md) | Filtrage et segmentation des devis |
+| [Endpoint Ranking](ranking.md) | Classement et analyse des performances commerciales |
+| [Espace client](client-space.md) | Fonctionnalités de l'espace client |
+| [Monitoring Uptime](uptime.md) | Surveillance des services et infrastructure |
+| [Problématiques actuelles](issues.md) | Défis techniques et solutions proposées |
+| [Documentation Telescope (Monitoring API)](telescope.md) | Documentation pour le monitoring des API avec Telescope |
+| [API Drive (Upload Minio)](drives_files.md) | Documentation endpoints fichiers et upload Minio |
 
 ## 🚀 Démarrage rapide
 

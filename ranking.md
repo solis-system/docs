@@ -50,4 +50,4 @@ Cet endpoint est également utilisé dans le `QuoteController` avec le paramètr
 
 ***
 
-[← Système de types devis](devis-types.md) | [Retour à l'index](./) | [Espace client →](client-space.md)
+[← Système de types devis](devis-types.md) | [Retour à l'index](README.md) | [Espace client →](client-space.md)

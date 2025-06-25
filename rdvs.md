@@ -53,4 +53,4 @@ _Récupère les détails du rendez-vous avec l'ID 30543_
 
 ***
 
-[← API & Endpoints](api.md) | [Retour à l'index](./) | [Espace client →](client-space.md)
+[← API & Endpoints](api.md) | [Retour à l'index](README.md) | [Espace client →](client-space.md)
