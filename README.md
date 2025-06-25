@@ -17,6 +17,7 @@
 | [Espace client](./client-space.md) | Fonctionnalités de l'espace client |
 | [Monitoring Uptime](./uptime.md) | Surveillance des services et infrastructure |
 | [Problématiques actuelles](./issues.md) | Défis techniques et solutions proposées |
+| [Documentation Telescope (Monitoring API)](./telescope.md) | Documentation pour le monitoring des API avec Telescope |
 
 ## 🚀 Démarrage rapide
 
