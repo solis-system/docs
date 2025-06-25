@@ -47,7 +47,7 @@ Utilisateurs administratifs de la plateforme.
 
 ### Table `drive_files`
 
-Fichiers uploadés dans Minio.
+Fichiers uploadés dans Minio ([voir endpoints et process](./drives_files.md)).
 
 | Champ             | Type   | Description                                 |
 | ----------------- | ------ | ------------------------------------------- |

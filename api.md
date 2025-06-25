@@ -41,7 +41,7 @@ POST /intervention/{id_intervention}/pdf
 1. **Requête Vue.js** : Soumission formulaire intervention
 2. **Traitement Laravel** : Validation et récupération données HFSQL
 3. **Génération PDF Express** : Création avec template `intervention_pv.blade.php`
-4. **Stockage Minio** : Upload et chiffrement du fichier
+4. **Stockage Minio** : Upload et chiffrement du fichier ([voir détails](./drives_files.md))
 5. **Enregistrement MySQL** : Métadonnées dans `drive_files`
 6. **Finalisation** : Mise à jour intervention HFSQL
 
